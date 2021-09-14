@@ -132,6 +132,7 @@ public class ArticuloVenta extends javax.swing.JFrame {
                            double nuevoSubTotal = nuevoPrecio*cantidadServicio;
                            txtPrecio.setText(String.valueOf(nuevoPrecio));
                            txtSubtotal.setText(String.valueOf(nuevoSubTotal));
+                           calcularCantidad();
                            /*
                            
                            
@@ -506,6 +507,7 @@ public class ArticuloVenta extends javax.swing.JFrame {
             double nuevoSubTotal = nuevoPrecio*cantidadServicio;
             txtPrecio.setText(String.valueOf(nuevoPrecio));
             txtSubtotal.setText(String.valueOf(nuevoSubTotal));
+            calcularCantidad();
         } else {
             JOptionPane.showMessageDialog(null, "VERIFIQUE LA CANTIDAD");
         }

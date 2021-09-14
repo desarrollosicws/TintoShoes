@@ -35,6 +35,9 @@ import com.sicws.puntodeventatouch.consultas.*;
 import com.sicws.puntodeventatouch.ticket.imprimirTicket;
 import com.sicws.puntodeventatouch.utileria.Rendercheck;
 import com.sicws.puntoeventatouch.main.Main;
+import static com.sicws.puntoeventatouch.main.Ventas.cbxClientes;
+import static com.sicws.puntoeventatouch.main.Ventas.tablaProductos;
+import static com.sicws.puntoeventatouch.main.Ventas.txtPrecio;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.io.IOException;
@@ -437,12 +440,14 @@ public class Ordenes extends javax.swing.JFrame {
                         }
                          
                          double precio = Double.parseDouble(datoPrecio);
-                         Articulo art = new Articulo();
-                         Articulo.txtArticulo.setText(String.valueOf(ValorBoton));
-                         Articulo.txtPrecio.setText(String.valueOf(precio));
-                         Articulo.txtCantidad.setText(String.valueOf(1));
-                         Articulo.txtSubtotal.setText(String.valueOf(precio));
-                         Articulo.precioActual = precio;
+                         ArticuloOrden art = new ArticuloOrden();
+                         ArticuloOrden.txtArticulo.setText(String.valueOf(ValorBoton));
+                         ArticuloOrden.txtPrecio.setText(String.valueOf(precio));
+                         ArticuloOrden.txtDescuento.setText(String.valueOf(Descuento.getDescuento(String.valueOf(ValorBoton),String.valueOf(cbxClientes.getSelectedItem()))));
+                         ArticuloOrden.txtCantidad.setText(String.valueOf(1));
+                         ArticuloOrden.txtSubtotal.setText(String.valueOf(precio));
+                         ArticuloOrden.precioActual = precio;
+                         ArticuloOrden.calcularCantidad();
                          art.setVisible(true);
                          
                          try {
@@ -776,6 +781,7 @@ public class Ordenes extends javax.swing.JFrame {
         btnLimpiar = new rscomponentshade.RSButtonShade();
         btnCancelar = new rscomponentshade.RSButtonShade();
         tgbAnticipo = new rscomponentshade.RSToggleButtonShade();
+        btnCancelar1 = new rscomponentshade.RSButtonShade();
         panelTeclado = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -932,6 +938,21 @@ public class Ordenes extends javax.swing.JFrame {
             }
         });
         jPanel8.add(tgbAnticipo);
+
+        btnCancelar1.setBackground(new java.awt.Color(0, 168, 235));
+        btnCancelar1.setText("MODIFICAR");
+        btnCancelar1.setBgHover(new java.awt.Color(0, 155, 219));
+        btnCancelar1.setBgShade(new java.awt.Color(255, 255, 255));
+        btnCancelar1.setBgShadeHover(new java.awt.Color(255, 255, 255));
+        btnCancelar1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCancelar1.setPixels(0);
+        btnCancelar1.setRound(0);
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(btnCancelar1);
 
         panelTeclado.setBackground(new java.awt.Color(255, 255, 255));
         panelTeclado.setLayout(new java.awt.GridLayout(4, 3, 2, 2));
@@ -1548,6 +1569,26 @@ public class Ordenes extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantidadActionPerformed
 
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        int row = tablaProductos.getSelectedRow();
+        if (row<0) {
+            JOptionPane.showMessageDialog(null, "SELECCIONE LO QUE DESEA MODIFICAR");
+        } else {
+            ArticuloOrdenModificar art = new ArticuloOrdenModificar();
+            ArticuloOrdenModificar.txtArticulo.setText(String.valueOf(tablaProductos.getValueAt(row, 1)));
+            ArticuloOrdenModificar.txtPrecio.setText(String.valueOf(tablaProductos.getValueAt(row, 5)));
+            ArticuloOrdenModificar.txtDescuento.setText(String.valueOf(tablaProductos.getValueAt(row, 6)));
+            ArticuloOrdenModificar.txtCantidad.setText(String.valueOf(tablaProductos.getValueAt(row, 2)));
+            ArticuloOrdenModificar.txtSubtotal.setText(String.valueOf(tablaProductos.getValueAt(row, 7)));
+            ArticuloOrdenModificar.txtAreaDescripcion.append(String.valueOf(tablaProductos.getValueAt(row, 3)));
+            ArticuloOrdenModificar.txtAreaExtras.append(String.valueOf(tablaProductos.getValueAt(row, 4)));
+            ArticuloOrdenModificar.precioActual = Double.parseDouble(txtPrecio.getText());
+            ArticuloOrdenModificar.rowSelected = row;
+            ArticuloOrdenModificar.calcularCantidad();
+            art.setVisible(true);
+        }
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1584,6 +1625,7 @@ public class Ordenes extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rscomponentshade.RSButtonShade btnCancelar;
+    private rscomponentshade.RSButtonShade btnCancelar1;
     private rscomponentshade.RSButtonShade btnEliminar;
     private rscomponentshade.RSButtonShade btnLimpiar;
     private rscomponentshade.RSButtonShade btnLiquidar;

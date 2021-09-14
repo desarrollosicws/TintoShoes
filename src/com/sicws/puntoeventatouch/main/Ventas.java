@@ -1534,18 +1534,23 @@ public class Ventas extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int row = tablaProductos.getSelectedRow();
-        ArticuloVentaModificar art = new ArticuloVentaModificar();
-        ArticuloVentaModificar.txtArticulo.setText(String.valueOf(tablaProductos.getValueAt(row, 1)));
-        ArticuloVentaModificar.txtPrecio.setText(String.valueOf(tablaProductos.getValueAt(row, 5)));
-        ArticuloVentaModificar.txtDescuento.setText(String.valueOf(tablaProductos.getValueAt(row, 6)));
-        ArticuloVentaModificar.txtCantidad.setText(String.valueOf(tablaProductos.getValueAt(row, 2)));
-        ArticuloVentaModificar.txtSubtotal.setText(String.valueOf(tablaProductos.getValueAt(row, 7)));
-        ArticuloVentaModificar.txtAreaDescripcion.append(String.valueOf(tablaProductos.getValueAt(row, 3)));
-        ArticuloVentaModificar.txtAreaExtras.append(String.valueOf(tablaProductos.getValueAt(row, 4)));
-        ArticuloVentaModificar.precioActual = Double.parseDouble(txtPrecio.getText());
-        ArticuloVentaModificar.rowSelected = row;
-        ArticuloVentaModificar.calcularCantidad();
-        art.setVisible(true);
+        if (row<0) {
+            JOptionPane.showMessageDialog(null, "SELECCIONE LO QUE DESEA MODIFICAR");
+        } else {
+            ArticuloVentaModificar art = new ArticuloVentaModificar();
+            ArticuloVentaModificar.txtArticulo.setText(String.valueOf(tablaProductos.getValueAt(row, 1)));
+            ArticuloVentaModificar.txtPrecio.setText(String.valueOf(tablaProductos.getValueAt(row, 5)));
+            ArticuloVentaModificar.txtDescuento.setText(String.valueOf(tablaProductos.getValueAt(row, 6)));
+            ArticuloVentaModificar.txtCantidad.setText(String.valueOf(tablaProductos.getValueAt(row, 2)));
+            ArticuloVentaModificar.txtSubtotal.setText(String.valueOf(tablaProductos.getValueAt(row, 7)));
+            ArticuloVentaModificar.txtAreaDescripcion.append(String.valueOf(tablaProductos.getValueAt(row, 3)));
+            ArticuloVentaModificar.txtAreaExtras.append(String.valueOf(tablaProductos.getValueAt(row, 4)));
+            ArticuloVentaModificar.precioActual = Double.parseDouble(txtPrecio.getText());
+            ArticuloVentaModificar.rowSelected = row;
+            ArticuloVentaModificar.calcularCantidad();
+            art.setVisible(true);
+        }
+        
     }//GEN-LAST:event_btnModificarActionPerformed
 
     public static void main(String args[]) {

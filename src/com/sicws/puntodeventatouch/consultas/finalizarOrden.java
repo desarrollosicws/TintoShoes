@@ -117,13 +117,17 @@ public class finalizarOrden {
             String desc = (String) tabla.getValueAt(i, 3);
             String ext = (String) tabla.getValueAt(i, 4);
             String notas = desc+" "+ext;
+            Double precio = Double.parseDouble((String) tabla.getValueAt(i, 5));
+            Double descuento = Double.parseDouble((String) tabla.getValueAt(i, 6));
+                
+                double diferencia = precio*(descuento/100);
             
             try {
                 PreparedStatement ps = cn.prepareStatement("INSERT INTO doctos_pv_det (docto_pv_det_id, docto_pv_id, clave_articulo, articulo_id, unidades, unidades_dev,tipo_contab_unid, precio_unitario,\n" +
                         "precio_unitario_impto, impuesto_por_unidad, pctje_dscto, precio_total_neto, precio_modificado, pctje_comis,\n" +
                         "rol, notas,posicion, dscto_art, dscto_extra)\n" +
-                        "values (gen_id(id_doctos, 1), (select max(docto_pv_id) from doctos_pv WHERE tipo_docto='O' AND caja_id='3297'),(select clave_articulo from claves_articulos WHERE articulo_id = (select articulo_id from articulos where nombre = '"+articulo+"')), (select articulo_id from articulos WHERE nombre='"+articulo+"'), '"+tabla.getValueAt(i, 2)+"', 0,1, '"+tabla.getValueAt(i, 5)+"', '"+tabla.getValueAt(i, 5)+"',0, 0, '"+tabla.getValueAt(i, 7)+"', 'N',\n" +
-                        "0, 'N','"+notas+"' ,'"+posicion+"', 0, 0)");
+                        "values (gen_id(id_doctos, 1), (select max(docto_pv_id) from doctos_pv WHERE tipo_docto='O' AND caja_id='3297'),(select clave_articulo from claves_articulos WHERE articulo_id = (select articulo_id from articulos where nombre = '"+articulo+"')), (select articulo_id from articulos WHERE nombre='"+articulo+"'), '"+tabla.getValueAt(i, 2)+"', 0,1, '"+tabla.getValueAt(i, 5)+"', '"+tabla.getValueAt(i, 5)+"',0, '"+descuento+"', '"+tabla.getValueAt(i, 7)+"', 'N',\n" +
+                        "0, 'N','"+notas+"' ,'"+posicion+"', '"+diferencia+"', 0)");
                 ps.executeUpdate();
                 posicion++;
             } catch (SQLException ex) {
