@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<jdbcDataAdapter class="net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl"><name>New Data Adapter </name><driver>org.firebirdsql.jdbc.FBDriver</driver><username>SYSDBA</username><password>masterkey</password><savePassword>true</savePassword><url>jdbc:firebirdsql://localhost:3050/D:/Microsip datos/TINTOSHOES.FDB </url><database></database><serverAddress></serverAddress><classpath>D:\Librerias Java\jaybird-full-3.0.6.jar</classpath></jdbcDataAdapter>

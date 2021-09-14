@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ticket" pageWidth="222" pageHeight="279" columnWidth="222" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="5aba3227-37e1-4e05-b8ed-59495d1c0356">
+	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="16"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<property name="com.jaspersoft.studio.unit." value="mm"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="mm"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="mm"/>
+	<parameter name="DETALLE" class="java.lang.Object">
+		<defaultValueExpression><![CDATA[$P{JASPER_REPORT}.getFields()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Folio" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select a.folio,a.fecha,a.importe_neto,c.nombre,CAST(d.UNIDADES AS DECIMAL(10,2)) as unidades,CAST(d.precio_unitario AS DECIMAL(10,2)) as precio_unitario,be.nombre AS ARTICULO,(select x.importe from doctos_pv_cobros x where x.docto_pv_id=(select max(a.docto_pv_id) from doctos_pv a WHERE A.TIPO_DOCTO='V') and x.tipo = 'C')  AS IMPORTE,d.precio_total_neto,
+(select x.importe from doctos_pv_cobros x where x.docto_pv_id=(select max(a.docto_pv_id) from doctos_pv a WHERE A.TIPO_DOCTO='V') and x.tipo = 'A')  AS CAMBIO
+, F.NOMBRE AS CLIENTE,D.NOTAS,G.NOMBRE,A.DSCTO_IMPORTE AS ANTICIPO,cast(CAST(d.UNIDADES AS DECIMAL(10,2))* D.precio_unitario as decimal(10,2)) as subtotal,h.nombre as linea,f.contacto1
+from doctos_pv a
+left join cajas c on c.caja_id = a.caja_id
+left join doctos_pv_det d on d.docto_pv_id = a.docto_pv_id
+left join articulos be on be.articulo_id = d.articulo_id
+left join doctos_pv_cobros e on e.docto_pv_id = a.docto_pv_id
+LEFT JOIN CLIENTES F ON F.CLIENTE_ID=A.CLIENTE_ID
+LEFT JOIN formas_cobro G ON G.FORMA_COBRO_ID = E.FORMA_COBRO_ID
+left JOIN lineas_articulos h ON h.linea_articulo_id=be.linea_articulo_id
+where a.docto_pv_id=(SELECT DOCTO_PV_ID FROM DOCTOS_PV WHERE FOLIO=$P{Folio} AND TIPO_DOCTO='V')]]>
+	</queryString>
+	<field name="FOLIO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FOLIO"/>
+		<property name="com.jaspersoft.studio.field.label" value="FOLIO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="FECHA" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="FECHA"/>
+		<property name="com.jaspersoft.studio.field.label" value="FECHA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="IMPORTE_NETO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IMPORTE_NETO"/>
+		<property name="com.jaspersoft.studio.field.label" value="IMPORTE_NETO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="CAJAS"/>
+	</field>
+	<field name="UNIDADES" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CAST"/>
+		<property name="com.jaspersoft.studio.field.label" value="UNIDADES"/>
+	</field>
+	<field name="PRECIO_UNITARIO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CAST"/>
+		<property name="com.jaspersoft.studio.field.label" value="PRECIO_UNITARIO"/>
+	</field>
+	<field name="ARTICULO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ARTICULO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ARTICULOS"/>
+	</field>
+	<field name="IMPORTE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IMPORTE"/>
+		<property name="com.jaspersoft.studio.field.label" value="IMPORTE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV_COBROS"/>
+	</field>
+	<field name="PRECIO_TOTAL_NETO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PRECIO_TOTAL_NETO"/>
+		<property name="com.jaspersoft.studio.field.label" value="PRECIO_TOTAL_NETO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV_DET"/>
+	</field>
+	<field name="CAMBIO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IMPORTE"/>
+		<property name="com.jaspersoft.studio.field.label" value="CAMBIO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV_COBROS"/>
+	</field>
+	<field name="CLIENTE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLIENTE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="CLIENTES"/>
+	</field>
+	<field name="NOTAS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOTAS"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOTAS"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV_DET"/>
+	</field>
+	<field name="COLUMN_13" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="FORMAS_COBRO"/>
+	</field>
+	<field name="ANTICIPO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="DSCTO_IMPORTE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ANTICIPO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="SUBTOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CAST"/>
+		<property name="com.jaspersoft.studio.field.label" value="SUBTOTAL"/>
+	</field>
+	<field name="LINEA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="LINEA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="LINEAS_ARTICULOS"/>
+	</field>
+	<field name="CONTACTO1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CONTACTO1"/>
+		<property name="com.jaspersoft.studio.field.label" value="CONTACTO1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="CLIENTES"/>
+	</field>
+	<variable name="varTotal" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUBTOTAL}]]></variableExpression>
+	</variable>
+	<variable name="varSubtotal" class="java.lang.Double">
+		<variableExpression><![CDATA[($F{PRECIO_TOTAL_NETO}.longValue()==0.0? $F{SUBTOTAL}: $F{PRECIO_TOTAL_NETO})]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<staticText>
+				<reportElement x="36" y="65" width="139" height="12" uuid="65de1d67-047b-4d3d-89dc-57abfcee0f51">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENTA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="36" y="0" width="139" height="65" uuid="6897c273-d64a-405e-bfc3-9db545268446"/>
+				<imageExpression><![CDATA["C:/Iconos/IMG-20210806-WA0011.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="50" y="77" width="110" height="10" uuid="ae78784a-2a9d-4dd6-b003-5fdb24a11af8"/>
+				<textElement>
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[Boulevard Ortiz Mena #130, Col. Centro]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="22" y="3" width="77" height="10" uuid="7f2591b5-820e-4ea0-be4a-2b937a246163"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FOLIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="3" width="38" height="10" uuid="2ee059a6-f3d0-44c3-ae10-f6a63973e58e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="20" width="112" height="10" uuid="3d60a502-4614-4bab-86b3-b0d1455c938f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLIENTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="28" height="10" uuid="557cc50e-1108-4a83-97f0-b9efed3f54b0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Cliente: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="103" y="3" width="25" height="10" uuid="d094c21a-4aab-4b78-8d9d-27fc246f3f07">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="3" width="22" height="10" uuid="a93c6763-1620-4ed1-ab86-9687f765d720">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Folio: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="31" width="36" height="10" uuid="5adf55d9-50fe-4e26-abd1-dedc0255d59a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Telefono: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="37" y="31" width="103" height="10" uuid="0a9d6436-6ca0-430a-ac5b-d38edc1f0643"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONTACTO1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="80" height="10" uuid="44f063a8-9c19-4da6-8500-68109cbd3ef3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Caja: "+$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39">
+			<textField>
+				<reportElement x="162" y="0" width="40" height="10" uuid="17651af4-d40f-49cd-b01f-8ae098fc5e0c"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{PRECIO_TOTAL_NETO}.longValue()==0.0? "$ "+$F{SUBTOTAL}: "$ "+$F{PRECIO_TOTAL_NETO})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="0" width="153" height="10" uuid="f6c58653-785d-4f52-ae9d-f5e6a92e8e6a"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Servicio: "+$F{LINEA}+" "+$F{ARTICULO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="21" width="55" height="14" isRemoveLineWhenBlank="true" uuid="012068dd-d7a2-4e86-bab2-804b9f7fc3b6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{UNIDADES}.longValue()<=1.00 ? "": $F{UNIDADES}+" x")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="21" width="39" height="14" isRemoveLineWhenBlank="true" uuid="b6e8ae71-ea15-4eff-ae6e-40904f249e7a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{UNIDADES}.longValue()<=1.00 ? "": "$"+$F{PRECIO_UNITARIO})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="11" width="182" height="10" isRemoveLineWhenBlank="true" uuid="f1ed3da2-5e4a-4f33-afa7-f503814c3d57"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{NOTAS}==null || $F{NOTAS}.isEmpty() || $F{NOTAS}.equals(" ")? "": "Extras: "+$F{NOTAS})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="59" splitType="Stretch">
+			<textField>
+				<reportElement x="162" y="4" width="40" height="10" uuid="83b6a40c-9147-4409-95db-8452082a009a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{IMPORTE_NETO}.longValue()==0.0? "$ "+$V{varTotal}: "$ "+$F{IMPORTE_NETO})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="16" width="40" height="10" uuid="787b05e3-d70e-4562-b2e8-d2f9dda9f5f0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ANTICIPO}==null? "$ 0.0": "$ "+$F{ANTICIPO})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="114" y="4" width="48" height="10" uuid="e0474149-6ff2-4e24-ab45-8d8c84e79260">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="114" y="16" width="48" height="10" uuid="539bc8ac-ca09-4ff6-88bd-1362ec72d8e3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Anticipo: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="20" y="14" width="78" height="10" uuid="26faa389-d1e5-4948-bf0b-82ce6c894e04"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{COLUMN_13}==null? "": "Extras: "+$F{COLUMN_13})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="28" width="40" height="10" uuid="9a390bc7-2198-4165-8985-6e183c9b5999"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{IMPORTE}==null? "$ 0.00": "$ "+$F{IMPORTE})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="114" y="28" width="48" height="10" uuid="5c6c0705-b847-4f19-b09a-ae72e28ae327">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Importe:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="114" y="40" width="48" height="10" uuid="ee0cf00f-088e-409a-a4b4-e5a3a65edafc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Cambio:  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="4" width="74" height="10" uuid="a4b47281-cf1d-4b01-b523-da5c2a24eb47">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Forma de cobro:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="162" y="40" width="40" height="10" uuid="cdd7af8f-41e2-4918-856b-381ad032b6bf"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{CAMBIO}==null? "$ 0.00": "$ "+$F{CAMBIO})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="54" width="222" height="1" uuid="0e0f88fd-ffd5-4a45-b02a-30f9d15f9107">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unity" value="mm"/>
+					<property name="com.jaspersoft.studio.unit.y" value="mm"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="55" splitType="Stretch">
+			<image>
+				<reportElement x="26" y="0" width="10" height="10" uuid="6838161d-f515-4e14-9cd7-c21893f43b21"/>
+				<imageExpression><![CDATA["C:/Iconos/5282541_fb_social media_facebook_facebook logo_social network_icon.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="36" y="0" width="38" height="10" uuid="18613fe2-19c8-4a6c-984c-4b4068d7fc1a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[Tintoshoes]]></text>
+			</staticText>
+			<image>
+				<reportElement x="72" y="0" width="10" height="10" uuid="d1cf3533-7177-4d06-99bb-5ab610c17e8d"/>
+				<imageExpression><![CDATA["C:/Iconos/192150_instagram_icon.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="82" y="0" width="52" height="10" uuid="a9b71166-3434-4c77-88c3-35c455071daa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[Tintoshoes.Parral]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="10" width="200" height="10" uuid="d341b024-3908-4a86-a675-84777a81e0b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Este ticket es necesario para la entrega de sus objetos.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="200" height="14" uuid="45fa64f0-ee60-4bbf-80e3-f9c717617f43"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[En caso de robo o extravio solo se repondra al afectado el 70% del valor de cada objeto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="34" width="200" height="15" uuid="574a0673-ee95-4afa-96d0-2f9fc132b56f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[El tiempo limite de entrega es de 4 dias, a partir del 5to se cobrara un recargo de $5 por dia por cada objeto.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="50" height="10" uuid="85c6fdc4-c773-4f54-b357-905d37d7930c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[6271770796]]></text>
+			</staticText>
+			<image>
+				<reportElement x="134" y="0" width="18" height="10" uuid="65c5f2c1-088a-460f-9803-1b7f3c3edf99"/>
+				<imageExpression><![CDATA["C:/Iconos/326545_call_phone_icon.png"]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="6" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ticket" pageWidth="236" pageHeight="200" columnWidth="226" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" isIgnorePagination="true" uuid="5aba3227-37e1-4e05-b8ed-59495d1c0356">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<parameter name="DETALLE" class="java.lang.Object">
+		<defaultValueExpression><![CDATA[$P{JASPER_REPORT}.getFields()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select a.folio,a.fecha,a.importe_neto,c.nombre,CAST(d.UNIDADES AS DECIMAL(10,2)) as unidades,CAST(d.precio_unitario AS DECIMAL(10,2)) as precio_unitario,be.nombre AS ARTICULO,d.precio_total_neto,
+a.persona,d.notas,(SELECT Z.IMPORTE_NETO FROM DOCTOS_PV Z WHERE Z.REFER_RETING=A.FOLIO and Z.TIPO_DOCTO='I'),E.NOMBRE AS CLIENTE
+from doctos_pv a
+left join cajas c on c.caja_id = a.caja_id
+left join doctos_pv_det d on d.docto_pv_id = a.docto_pv_id
+left join articulos be on be.articulo_id = d.articulo_id
+left JOIN CLIENTES E ON E.CLIENTE_ID=A.CLIENTE_ID
+where a.docto_pv_id=(select max(a.docto_pv_id) from doctos_pv a WHERE a.tipo_docto = 'O' )]]>
+	</queryString>
+	<field name="FOLIO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FOLIO"/>
+		<property name="com.jaspersoft.studio.field.label" value="FOLIO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="FECHA" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="FECHA"/>
+		<property name="com.jaspersoft.studio.field.label" value="FECHA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="IMPORTE_NETO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IMPORTE_NETO"/>
+		<property name="com.jaspersoft.studio.field.label" value="IMPORTE_NETO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="CAJAS"/>
+	</field>
+	<field name="UNIDADES" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CAST"/>
+		<property name="com.jaspersoft.studio.field.label" value="UNIDADES"/>
+	</field>
+	<field name="PRECIO_UNITARIO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CAST"/>
+		<property name="com.jaspersoft.studio.field.label" value="PRECIO_UNITARIO"/>
+	</field>
+	<field name="ARTICULO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="ARTICULO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ARTICULOS"/>
+	</field>
+	<field name="PRECIO_TOTAL_NETO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PRECIO_TOTAL_NETO"/>
+		<property name="com.jaspersoft.studio.field.label" value="PRECIO_TOTAL_NETO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV_DET"/>
+	</field>
+	<field name="PERSONA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PERSONA"/>
+		<property name="com.jaspersoft.studio.field.label" value="PERSONA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="NOTAS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOTAS"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOTAS"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV_DET"/>
+	</field>
+	<field name="COLUMN_11" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IMPORTE_NETO"/>
+		<property name="com.jaspersoft.studio.field.label" value="IMPORTE_NETO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCTOS_PV"/>
+	</field>
+	<field name="CLIENTE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="CLIENTE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="CLIENTES"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<staticText>
+				<reportElement x="44" y="67" width="144" height="13" uuid="65de1d67-047b-4d3d-89dc-57abfcee0f51">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORDEN]]></text>
+			</staticText>
+			<image>
+				<reportElement x="41" y="2" width="150" height="65" uuid="d5d986a3-d5ff-46c3-9972-f525d1527f74"/>
+				<imageExpression><![CDATA["C:/Users/Admin/Pictures/IMG-20210806-WA0011.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement x="35" y="3" width="77" height="12" uuid="7f2591b5-820e-4ea0-be4a-2b937a246163"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FOLIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="154" y="3" width="38" height="13" uuid="2ee059a6-f3d0-44c3-ae10-f6a63973e58e"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="46" y="20" width="120" height="12" uuid="3d60a502-4614-4bab-86b3-b0d1455c938f"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLIENTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="20" width="38" height="13" uuid="557cc50e-1108-4a83-97f0-b9efed3f54b0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Cliente: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="3" width="36" height="13" uuid="d094c21a-4aab-4b78-8d9d-27fc246f3f07">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Fecha: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="3" width="26" height="13" uuid="a93c6763-1620-4ed1-ab86-9687f765d720">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Folio: ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="4" y="0" width="80" height="16" uuid="44f063a8-9c19-4da6-8500-68109cbd3ef3"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Caja: "+$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="44">
+			<textField>
+				<reportElement x="180" y="0" width="40" height="15" uuid="17651af4-d40f-49cd-b01f-8ae098fc5e0c"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$"+$F{PRECIO_TOTAL_NETO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="9" y="0" width="161" height="20" uuid="f6c58653-785d-4f52-ae9d-f5e6a92e8e6a"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ARTICULO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="30" width="55" height="14" isRemoveLineWhenBlank="true" uuid="012068dd-d7a2-4e86-bab2-804b9f7fc3b6"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{UNIDADES}.longValue()<=1.00 ? "": $F{UNIDADES}+" x")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="114" y="30" width="39" height="14" isRemoveLineWhenBlank="true" uuid="b6e8ae71-ea15-4eff-ae6e-40904f249e7a"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{UNIDADES}.longValue()<=1.00 ? "": "$"+$F{PRECIO_UNITARIO})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="20" width="192" height="10" isRemoveLineWhenBlank="true" uuid="c4a1897e-251e-4ab9-9f5c-9b6edce0f095"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{NOTAS}==null? "": "Extras: "+$F{NOTAS})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="180" y="0" width="40" height="12" uuid="83b6a40c-9147-4409-95db-8452082a009a"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$"+$F{IMPORTE_NETO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="17" width="40" height="14" uuid="787b05e3-d70e-4562-b2e8-d2f9dda9f5f0"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$"+$F{COLUMN_11}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="120" y="0" width="50" height="13" uuid="e0474149-6ff2-4e24-ab45-8d8c84e79260">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="16" width="55" height="13" uuid="539bc8ac-ca09-4ff6-88bd-1362ec72d8e3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[ANTICIPO: ]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="19" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="17" splitType="Stretch"/>
+	</summary>
+</jasperReport>
