@@ -37,8 +37,8 @@ public class imprimirTicket {
             PageFormat pageFormat = PrinterJob.getPrinterJob().defaultPage();
             printerJob.defaultPage(pageFormat);
             int selectedService = 0;
-            AttributeSet attributeSet = new HashPrintServiceAttributeSet(new PrinterName("Generica", null));
-            //AttributeSet attributeSet = new HashPrintServiceAttributeSet(new PrinterName("EC-PM-80250", null));
+            //AttributeSet attributeSet = new HashPrintServiceAttributeSet(new PrinterName("Generica", null));
+            AttributeSet attributeSet = new HashPrintServiceAttributeSet(new PrinterName("EC-PM-80250", null));
             PrintService[] printService = PrintServiceLookup.lookupPrintServices(null, attributeSet);
             try {
                 printerJob.setPrintService(printService[selectedService]);

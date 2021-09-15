@@ -333,7 +333,7 @@ public class NuevaVenta extends javax.swing.JFrame {
          try {
         
         
-        String sql = "select nombre from lineas_articulos WHERE NOMBRE <> 'SERVICIOS COMPLEMENTARIOS'";     
+        String sql = "select nombre from lineas_articulos";     
         Statement st;
         try {
             st=cn.createStatement();

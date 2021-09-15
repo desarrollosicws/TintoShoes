@@ -350,7 +350,7 @@ public class ModificarOrdenes extends javax.swing.JFrame {
 
         try {
        
-        String sql = "select nombre from lineas_articulos WHERE NOMBRE <> 'SERVICIOS COMPLEMENTARIOS' AND NOMBRE <> 'REPARACIONES'";
+        String sql = "select nombre from lineas_articulos";
      
         Statement st;
         try {

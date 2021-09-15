@@ -1,2 +1,0 @@
-puntodeventatouch.paqueteEnvio
-puntodeventatouch.cliente
