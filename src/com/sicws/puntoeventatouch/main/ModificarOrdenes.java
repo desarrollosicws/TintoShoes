@@ -35,10 +35,21 @@ import com.sicws.puntodeventatouch.consultas.*;
 import com.sicws.puntodeventatouch.ticket.imprimirTicket;
 import com.sicws.puntodeventatouch.utileria.Rendercheck;
 import com.sicws.puntoeventatouch.main.Main;
+import static com.sicws.puntoeventatouch.main.Ordenes.cbxClientes;
+import static com.sicws.puntoeventatouch.main.Ordenes.getDiasHabiles;
+import static com.sicws.puntoeventatouch.main.Ordenes.lblTotal;
+import static com.sicws.puntoeventatouch.main.Ordenes.tablaProductos;
+import static com.sicws.puntoeventatouch.main.Ordenes.txtAnticipo;
+import static com.sicws.puntoeventatouch.main.Ordenes.txtAreaNotas;
+import static com.sicws.puntoeventatouch.main.Ordenes.txtAreaNotas1;
+import static com.sicws.puntoeventatouch.main.Ordenes.txtImporte;
+import com.toedter.calendar.JDateChooser;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -63,6 +74,7 @@ public class ModificarOrdenes extends javax.swing.JFrame {
     JTextField text;
     private static DecimalFormat df = new DecimalFormat("0.00");
     public static String nombre;
+    public static String fecha;
      
     JCheckBox check = new JCheckBox();
     DefaultCellEditor defaultCelle = new DefaultCellEditor(check);
@@ -75,7 +87,7 @@ public class ModificarOrdenes extends javax.swing.JFrame {
         verificar();
         cargarCombo();
         cargarComboFormas();
-        this.setTitle("Ordenes de Venta");
+        this.setTitle("Modificar Ordenes de Venta");
         txtCantidad.setName("txtCantidad");
         txtImporte.setName("txtImporte");
         txtAnticipo.setName("txtAnticipo");
@@ -774,6 +786,7 @@ public class ModificarOrdenes extends javax.swing.JFrame {
         btnLimpiar = new rscomponentshade.RSButtonShade();
         btnCancelar = new rscomponentshade.RSButtonShade();
         tgbAnticipo = new rscomponentshade.RSToggleButtonShade();
+        btnCancelar1 = new rscomponentshade.RSButtonShade();
         panelTeclado = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -872,7 +885,7 @@ public class ModificarOrdenes extends javax.swing.JFrame {
         jPanel8.add(btnEliminar);
 
         btnLiquidar.setBackground(new java.awt.Color(0, 168, 235));
-        btnLiquidar.setText("REGISTRAR");
+        btnLiquidar.setText("ACTUALIZAR");
         btnLiquidar.setBgHover(new java.awt.Color(0, 155, 219));
         btnLiquidar.setBgShade(new java.awt.Color(255, 255, 255));
         btnLiquidar.setBgShadeHover(new java.awt.Color(255, 255, 255));
@@ -933,6 +946,21 @@ public class ModificarOrdenes extends javax.swing.JFrame {
         });
         jPanel8.add(tgbAnticipo);
 
+        btnCancelar1.setBackground(new java.awt.Color(0, 168, 235));
+        btnCancelar1.setText("MODIFICAR");
+        btnCancelar1.setBgHover(new java.awt.Color(0, 155, 219));
+        btnCancelar1.setBgShade(new java.awt.Color(255, 255, 255));
+        btnCancelar1.setBgShadeHover(new java.awt.Color(255, 255, 255));
+        btnCancelar1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCancelar1.setPixels(0);
+        btnCancelar1.setRound(0);
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(btnCancelar1);
+
         panelTeclado.setBackground(new java.awt.Color(255, 255, 255));
         panelTeclado.setLayout(new java.awt.GridLayout(4, 3, 2, 2));
 
@@ -991,7 +1019,13 @@ public class ModificarOrdenes extends javax.swing.JFrame {
             new String [] {
 
             }
-        ));
+
+        ){
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        });
         tablaProductos.setGridColor(new java.awt.Color(255, 255, 255));
         tablaProductos.setIntercellSpacing(new java.awt.Dimension(0, 0));
         tablaProductos.setRowHeight(25);
@@ -1178,6 +1212,7 @@ public class ModificarOrdenes extends javax.swing.JFrame {
         txtPrecio.setPlaceholder("PRECIO");
         txtPrecio.setRound(0);
 
+        txtCantidad.setEditable(false);
         txtCantidad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCantidad.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         txtCantidad.setPixels(0);
@@ -1398,74 +1433,144 @@ public class ModificarOrdenes extends javax.swing.JFrame {
 
     
     private void btnLiquidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLiquidarActionPerformed
-    String var = "TENIS NIKE-REPARACION";
-    int extraer = var.indexOf("-");
-    String descripcion = var.substring(0, extraer);
-    String extras = var.substring(extraer+1,var.length());
-        System.out.println(extras);
-        
-
-        
-        
-        /*        finalizarOrden venta = new finalizarOrden();
-        
-        entradaInventario inventario = new entradaInventario();
-        int rows = tablaProductos.getRowCount();
-        double total =  Double.parseDouble(lblTotal.getText());
-        double importe =  Double.parseDouble(txtImporte.getText());
-        double anticipo =  Double.parseDouble(txtAnticipo.getText());
-        String notas = txtAreaNotas1.getText()+" "+txtAreaNotas.getText();
-        if (rows==0 && total==0 && importe == 0) {
-            JOptionPane.showMessageDialog(null, "VERIFIQUE SU ORDEN");
-        } else if (importe==0 && anticipo>0){
-            JOptionPane.showMessageDialog(null,"VERIFIQUE SU IMPORTE");
-                txtImporte.requestFocus();
-                txtImporte.selectAll();
-        } else if (importe==0 && anticipo == 0){
-            if (JOptionPane.showConfirmDialog(null, "¿LA ORDEN INCLUYE ANTICIPO?", "Traspasar Venta", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                txtAnticipo.requestFocus();
-                txtAnticipo.selectAll();
-            }
-            else {
-                System.out.println("LIQUIDAR");
-                inventario.generarEntradaInventario(tablaProductos,cbxClientes);
-                venta.generarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas);
-                
-                
-                limpiarCampos();
-                this.dispose();
-            }
-        } else if (importe>0 && anticipo >0) {
-            System.out.println("LIQUIDAR");
-                inventario.generarEntradaInventario(tablaProductos,cbxClientes);
-                venta.generarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas);
-                limpiarCampos();
-                this.dispose();
+    try {
+            JDateChooser jd = new JDateChooser();
+            boolean fech = false;
             
-        }*/
-        /*int fechaLimite = 3;
-        int diasArgegar = 1;
-        Calendar fecha = Calendar.getInstance();
-        Calendar fechados = Calendar.getInstance();
-        fechados.add(Calendar.DATE, fechaLimite);
-        System.out.println(getDiasHabiles(fecha.getTime(), fechados.getTime()));
-        int diasHabiles =  getDiasHabiles(fecha.getTime(), fechados.getTime());
-        while (diasHabiles<fechaLimite) {            
+            String año = fecha.substring(0, 4);
+            String mes = fecha.substring(5, 7);
+            String dias = fecha.substring(8, 10);
+            String fechi = dias+"/"+mes+"/"+año;
+            System.out.println(dias+mes+año);
+            
+            Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(fechi);  
+            jd.setDate(date1);
+            String message ="FECHA DE ENTREGA:\n";
+            Object[] params = {message,jd};
+            String fecha = String.valueOf(JOptionPane.showConfirmDialog(null,params,"FECHA", JOptionPane.PLAIN_MESSAGE));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date newDate = jd.getDate();
+            Date thisDate = new Date();
+            
+            
+            String fechaHoy = dateFormat.format(thisDate);
+            String fechaT = dateFormat.format(newDate);
+            Date f = dateFormat.parse(fechaHoy);
+            Date S = dateFormat.parse(fechaT);
+            
+            
+            
+            
+            if (S.after(f) || S.equals(f) ) {
+                //JOptionPane.showMessageDialog(null, "NO ANTES O ES IGUAL");
+                fech = true;
+            }  else {
+                //JOptionPane.showMessageDialog(null, "ANTES");
+                fech = false;
+            }
+            
+            int fechaLimite = 5;
+            int diasArgegar = 1;
+            Calendar fechaS = Calendar.getInstance();
+            Calendar fechados = dateToCalendar(S);
+            Calendar fechatres = dateToCalendar(S);
+            //DateAndCalendar obj = new DateAndCalendar();
+            fechados.add(Calendar.DATE, fechaLimite);
+            //System.out.println(getDiasHabiles(fechaS.getTime(), fechados.getTime()));
+            Date fechaConDias = calendarToDate(fechados);
+            System.out.println("SSSS "+calendarToDate(fechados));
+            int diasHabiles =  getDiasHabiles(S,fechaConDias);
+            System.out.println("DIAS HABILES "+diasHabiles);
+            if (diasHabiles<5) {
+                System.out.println("SI SE AGEGAN");
+            while (diasHabiles<4) {
             diasHabiles++;
             diasArgegar++;
             System.out.println(diasArgegar);
             //diasHabiles=3;
+            }
+                if (diasHabiles==4 && diasArgegar ==1) {
+                    System.out.println("AQUI");
+                    //diasHabiles = 3;
+                    diasArgegar+=1;
+                }
+            fechaLimite+=diasArgegar;
+            fechatres.add(Calendar.DATE, fechaLimite);
+            } else {
+                fechatres.add(Calendar.DATE, fechaLimite);
+            }
+            
+            System.out.println("DIAS AGREGAR: "+diasArgegar+"DIAS HABILES: "+diasHabiles+"DIAS HABILES: "+fechaLimite);
+            System.out.println(fechados.getTime());
+            fechados.add(Calendar.DATE, fechaLimite-4);
+            Date fechaConDiasT = calendarToDate(fechatres);
+            String fechaUltima = dateFormat.format(fechaConDiasT);
+            System.out.println("fffffffffffff "+fechaConDiasT+" sssssssssssssssss "+fechaUltima);
+            //JOptionPane.showMessageDialog(null, fechaUltima);
+            
+            
+            
+            
+            
+            
+            if (fech==true) {
+                String nuevaFecha = fechaT.replace("/", ".");
+                String ultimaFecha = fechaUltima.replace("/", ".");
+                System.out.println("NUEVA FECHA "+nuevaFecha);
+                //fech =false;
+                actualizarOrden venta = new actualizarOrden();
+                entradaInventario inventario = new entradaInventario();
+                int rows = tablaProductos.getRowCount();
+                double total =  Double.parseDouble(lblTotal.getText());
+                double importe =  Double.parseDouble(txtImporte.getText());
+                double anticipo =  Double.parseDouble(txtAnticipo.getText());
+                String notas = txtAreaNotas1.getText()+" "+txtAreaNotas.getText();
+                if (rows==0 && total==0 && importe == 0) {
+                JOptionPane.showMessageDialog(null, "VERIFIQUE SU ORDEN");
+                } else if (importe==0 && anticipo>0){
+                JOptionPane.showMessageDialog(null,"VERIFIQUE SU IMPORTE");
+                txtImporte.requestFocus();
+                txtImporte.selectAll();
+                } else if (importe==0 && anticipo == 0){
+                if (JOptionPane.showConfirmDialog(null, "¿LA ORDEN INCLUYE ANTICIPO?", "Traspasar Venta", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                txtAnticipo.requestFocus();
+                txtAnticipo.selectAll();
+                }
+                else {
+                System.out.println("LIQUIDAR");
+                //inventario.generarEntradaInventario(tablaProductos,cbxClientes);
+                venta.actualizarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas,nuevaFecha,ultimaFecha,lblFolio.getText());
+
+
+                limpiarCampos();
+                this.dispose();
+                }
+                } else if (importe>0 && anticipo >0) {
+                System.out.println("LIQUIDAR");
+                //inventario.generarEntradaInventario(tablaProductos,cbxClientes);
+                venta.actualizarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas,nuevaFecha,ultimaFecha,lblFolio.getText());
+                limpiarCampos();
+                this.dispose();
+
+                }
+            }
+            /**/
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(Ordenes.class.getName()).log(Level.SEVERE, null, ex);
         }
-        fechaLimite=+diasArgegar;
-        fechados.add(Calendar.DATE, fechaLimite);
-        System.out.println(getDiasHabiles(fecha.getTime(), fechados.getTime()));
-        System.out.println(fechados.getTime()                                                                                                                                                                                                                                                                                                                                                                                                                                    );
-        System.out.println(fechados.get(Calendar.DAY_OF_MONTH)-1);
-        System.out.println(fechados.get(Calendar.MONTH)+1);
-        System.out.println(fechados.get(Calendar.YEAR));*/
 
     }//GEN-LAST:event_btnLiquidarActionPerformed
+private Date calendarToDate(Calendar calendar) {
+		return calendar.getTime();
+	}
+    private Calendar dateToCalendar(Date date) {
 
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar;}
+
+	
     public static int getDiasHabiles(Date startDate, Date endDate){
     
         Calendar startCal = Calendar.getInstance();
@@ -1577,6 +1682,26 @@ public class ModificarOrdenes extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantidadActionPerformed
 
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        int row = tablaProductos.getSelectedRow();
+        if (row<0) {
+            JOptionPane.showMessageDialog(null, "SELECCIONE LO QUE DESEA MODIFICAR");
+        } else {
+            ArticuloModificarOrdenModificar art = new ArticuloModificarOrdenModificar();
+            ArticuloModificarOrdenModificar.txtArticulo.setText(String.valueOf(tablaProductos.getValueAt(row, 1)));
+            ArticuloModificarOrdenModificar.txtPrecio.setText(String.valueOf(tablaProductos.getValueAt(row, 5)));
+            ArticuloModificarOrdenModificar.txtDescuento.setText(String.valueOf(tablaProductos.getValueAt(row, 6)));
+            ArticuloModificarOrdenModificar.txtCantidad.setText(String.valueOf(tablaProductos.getValueAt(row, 2)));
+            ArticuloModificarOrdenModificar.txtSubtotal.setText(String.valueOf(tablaProductos.getValueAt(row, 7)));
+            ArticuloModificarOrdenModificar.txtAreaDescripcion.append(String.valueOf(tablaProductos.getValueAt(row, 3)));
+            ArticuloModificarOrdenModificar.txtAreaExtras.append(String.valueOf(tablaProductos.getValueAt(row, 4)));
+            ArticuloModificarOrdenModificar.precioActual = Double.parseDouble(txtPrecio.getText());
+            ArticuloModificarOrdenModificar.rowSelected = row;
+            ArticuloModificarOrdenModificar.calcularCantidad();
+            art.setVisible(true);
+        }
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1615,6 +1740,7 @@ public class ModificarOrdenes extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rscomponentshade.RSButtonShade btnCancelar;
+    private rscomponentshade.RSButtonShade btnCancelar1;
     private rscomponentshade.RSButtonShade btnEliminar;
     private rscomponentshade.RSButtonShade btnLimpiar;
     private rscomponentshade.RSButtonShade btnLiquidar;

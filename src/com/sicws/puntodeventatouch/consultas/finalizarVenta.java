@@ -129,6 +129,10 @@ public class finalizarVenta {
             
             PreparedStatement deleteOrdenPVDetalle = cn.prepareStatement("DELETE FROM DOCTOS_PV_DET WHERE DOCTO_PV_ID='"+id+"'");
             deleteOrdenPVDetalle.executeUpdate();
+            
+            PreparedStatement deleteOrdenDias = cn.prepareStatement("DELETE FROM DIAS_VENCIDOS WHERE ID_DOCTO='"+id+"'");
+            deleteOrdenDias.executeUpdate();
+            
             lbltotal.setText("0.0");
             lblcambio.setText("0.0");
             txtimporte.setText("0.0");

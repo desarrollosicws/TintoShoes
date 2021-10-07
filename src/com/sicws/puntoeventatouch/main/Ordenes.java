@@ -38,10 +38,14 @@ import com.sicws.puntoeventatouch.main.Main;
 import static com.sicws.puntoeventatouch.main.Ventas.cbxClientes;
 import static com.sicws.puntoeventatouch.main.Ventas.tablaProductos;
 import static com.sicws.puntoeventatouch.main.Ventas.txtPrecio;
+import com.toedter.calendar.JDateChooser;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1399,65 +1403,137 @@ public class Ordenes extends javax.swing.JFrame {
 
     
     private void btnLiquidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLiquidarActionPerformed
-        finalizarOrden venta = new finalizarOrden();
-        
-        entradaInventario inventario = new entradaInventario();
-        int rows = tablaProductos.getRowCount();
-        double total =  Double.parseDouble(lblTotal.getText());
-        double importe =  Double.parseDouble(txtImporte.getText());
-        double anticipo =  Double.parseDouble(txtAnticipo.getText());
-        String notas = txtAreaNotas1.getText()+" "+txtAreaNotas.getText();
-        if (rows==0 && total==0 && importe == 0) {
-            JOptionPane.showMessageDialog(null, "VERIFIQUE SU ORDEN");
-        } else if (importe==0 && anticipo>0){
-            JOptionPane.showMessageDialog(null,"VERIFIQUE SU IMPORTE");
-                txtImporte.requestFocus();
-                txtImporte.selectAll();
-        } else if (importe==0 && anticipo == 0){
-            if (JOptionPane.showConfirmDialog(null, "¿LA ORDEN INCLUYE ANTICIPO?", "Traspasar Venta", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                txtAnticipo.requestFocus();
-                txtAnticipo.selectAll();
-            }
-            else {
-                System.out.println("LIQUIDAR");
-                inventario.generarEntradaInventario(tablaProductos,cbxClientes);
-                venta.generarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas);
-                
-                
-                limpiarCampos();
-                this.dispose();
-            }
-        } else if (importe>0 && anticipo >0) {
-            System.out.println("LIQUIDAR");
-                inventario.generarEntradaInventario(tablaProductos,cbxClientes);
-                venta.generarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas);
-                limpiarCampos();
-                this.dispose();
+
+        try {
+            JDateChooser jd = new JDateChooser();
+            boolean fech = false;
+            String message ="FECHA DE ENTREGA:\n";
+            Object[] params = {message,jd};
+            String fecha = String.valueOf(JOptionPane.showConfirmDialog(null,params,"FECHA", JOptionPane.PLAIN_MESSAGE));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date newDate = jd.getDate();
+            Date thisDate = new Date();
             
-        }
-        /*int fechaLimite = 3;
-        int diasArgegar = 1;
-        Calendar fecha = Calendar.getInstance();
-        Calendar fechados = Calendar.getInstance();
-        fechados.add(Calendar.DATE, fechaLimite);
-        System.out.println(getDiasHabiles(fecha.getTime(), fechados.getTime()));
-        int diasHabiles =  getDiasHabiles(fecha.getTime(), fechados.getTime());
-        while (diasHabiles<fechaLimite) {            
+            
+            String fechaHoy = dateFormat.format(thisDate);
+            String fechaT = dateFormat.format(newDate);
+            Date f = dateFormat.parse(fechaHoy);
+            Date S = dateFormat.parse(fechaT);
+            
+            
+            
+            
+            if (S.after(f) || S.equals(f) ) {
+                //JOptionPane.showMessageDialog(null, "NO ANTES O ES IGUAL");
+                fech = true;
+            }  else {
+                //JOptionPane.showMessageDialog(null, "ANTES");
+                fech = false;
+            }
+            
+            int fechaLimite = 5;
+            int diasArgegar = 1;
+            Calendar fechaS = Calendar.getInstance();
+            Calendar fechados = dateToCalendar(S);
+            Calendar fechatres = dateToCalendar(S);
+            //DateAndCalendar obj = new DateAndCalendar();
+            fechados.add(Calendar.DATE, fechaLimite);
+            //System.out.println(getDiasHabiles(fechaS.getTime(), fechados.getTime()));
+            Date fechaConDias = calendarToDate(fechados);
+            System.out.println("SSSS "+calendarToDate(fechados));
+            int diasHabiles =  getDiasHabiles(S,fechaConDias);
+            System.out.println("DIAS HABILES "+diasHabiles);
+            if (diasHabiles<5) {
+                System.out.println("SI SE AGEGAN");
+            while (diasHabiles<4) {
             diasHabiles++;
             diasArgegar++;
             System.out.println(diasArgegar);
             //diasHabiles=3;
+            }
+                if (diasHabiles==4 && diasArgegar ==1) {
+                    System.out.println("AQUI");
+                    //diasHabiles = 3;
+                    diasArgegar+=1;
+                }
+            fechaLimite+=diasArgegar;
+            fechatres.add(Calendar.DATE, fechaLimite);
+            } else {
+                fechatres.add(Calendar.DATE, fechaLimite);
+            }
+            
+            System.out.println("DIAS AGREGAR: "+diasArgegar+"DIAS HABILES: "+diasHabiles+"DIAS HABILES: "+fechaLimite);
+            System.out.println(fechados.getTime());
+            fechados.add(Calendar.DATE, fechaLimite-4);
+            Date fechaConDiasT = calendarToDate(fechatres);
+            String fechaUltima = dateFormat.format(fechaConDiasT);
+            System.out.println("fffffffffffff "+fechaConDiasT+" sssssssssssssssss "+fechaUltima);
+            //JOptionPane.showMessageDialog(null, fechaUltima);
+            
+            
+            
+            
+            
+            
+            if (fech==true) {
+                String nuevaFecha = fechaT.replace("/", ".");
+                String ultimaFecha = fechaUltima.replace("/", ".");
+                System.out.println("NUEVA FECHA "+nuevaFecha);
+                //fech =false;
+                finalizarOrden venta = new finalizarOrden();
+                entradaInventario inventario = new entradaInventario();
+                int rows = tablaProductos.getRowCount();
+                double total =  Double.parseDouble(lblTotal.getText());
+                double importe =  Double.parseDouble(txtImporte.getText());
+                double anticipo =  Double.parseDouble(txtAnticipo.getText());
+                String notas = txtAreaNotas1.getText()+" "+txtAreaNotas.getText();
+                if (rows==0 && total==0 && importe == 0) {
+                JOptionPane.showMessageDialog(null, "VERIFIQUE SU ORDEN");
+                } else if (importe==0 && anticipo>0){
+                JOptionPane.showMessageDialog(null,"VERIFIQUE SU IMPORTE");
+                txtImporte.requestFocus();
+                txtImporte.selectAll();
+                } else if (importe==0 && anticipo == 0){
+                if (JOptionPane.showConfirmDialog(null, "¿LA ORDEN INCLUYE ANTICIPO?", "Traspasar Venta", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                txtAnticipo.requestFocus();
+                txtAnticipo.selectAll();
+                }
+                else {
+                System.out.println("LIQUIDAR");
+                inventario.generarEntradaInventario(tablaProductos,cbxClientes);
+                venta.generarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas,nuevaFecha,ultimaFecha);
+
+
+                limpiarCampos();
+                this.dispose();
+                }
+                } else if (importe>0 && anticipo >0) {
+                System.out.println("LIQUIDAR");
+                inventario.generarEntradaInventario(tablaProductos,cbxClientes);
+                venta.generarOrdenVenta(lblCambio, lblTotal, txtImporte,txtAnticipo ,tablaProductos,cbxClientes,cbxFormas,notas,nuevaFecha,ultimaFecha);
+                limpiarCampos();
+                this.dispose();
+
+                }
+            }
+            /**/
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(Ordenes.class.getName()).log(Level.SEVERE, null, ex);
         }
-        fechaLimite=+diasArgegar;
-        fechados.add(Calendar.DATE, fechaLimite);
-        System.out.println(getDiasHabiles(fecha.getTime(), fechados.getTime()));
-        System.out.println(fechados.getTime()                                                                                                                                                                                                                                                                                                                                                                                                                                    );
-        System.out.println(fechados.get(Calendar.DAY_OF_MONTH)-1);
-        System.out.println(fechados.get(Calendar.MONTH)+1);
-        System.out.println(fechados.get(Calendar.YEAR));*/
 
     }//GEN-LAST:event_btnLiquidarActionPerformed
 
+    private Date calendarToDate(Calendar calendar) {
+		return calendar.getTime();
+	}
+    private Calendar dateToCalendar(Date date) {
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar;}
+
+	
     public static int getDiasHabiles(Date startDate, Date endDate){
     
         Calendar startCal = Calendar.getInstance();

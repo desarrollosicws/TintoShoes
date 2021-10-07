@@ -7,6 +7,7 @@ package com.sicws.puntodeventatouch.consultas;
 
 import com.sicws.puntodeventatouch.conexion.conexionBD;
 import com.sicws.puntodeventatouch.ticket.imprimirTicket;
+import static com.sicws.puntoeventatouch.main.Ordenes.tablaProductos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +32,7 @@ public class finalizarOrden {
     Connection cn = con.conexion();
     private static DecimalFormat df = new DecimalFormat("0.00");
     
-    public void generarOrdenVenta(JLabel lblcambio,JLabel lbltotal,JTextField txtimporte,JTextField txtAnticipo,JTable tabla,JComboBox cbxCliente,JComboBox cbxFormas,String not){
+    public void generarOrdenVenta(JLabel lblcambio,JLabel lbltotal,JTextField txtimporte,JTextField txtAnticipo,JTable tabla,JComboBox cbxCliente,JComboBox cbxFormas,String not,String fecha, String fechaUltima){
         imprimirTicket imp = new imprimirTicket();
         DefaultTableModel model= (DefaultTableModel) tabla.getModel();
         Double importe = Double.parseDouble(txtimporte.getText());
@@ -116,18 +117,18 @@ public class finalizarOrden {
             String articulo = (String) tabla.getValueAt(i, 1);
             String desc = (String) tabla.getValueAt(i, 3);
             String ext = (String) tabla.getValueAt(i, 4);
-            String notas = desc+" "+ext;
+            String notas = desc+"-"+ext;
             Double precio = Double.parseDouble((String) tabla.getValueAt(i, 5));
             Double descuento = Double.parseDouble((String) tabla.getValueAt(i, 6));
                 
-                double diferencia = precio*(descuento/100);
+            double diferencia = precio*(descuento/100);
             
             try {
                 PreparedStatement ps = cn.prepareStatement("INSERT INTO doctos_pv_det (docto_pv_det_id, docto_pv_id, clave_articulo, articulo_id, unidades, unidades_dev,tipo_contab_unid, precio_unitario,\n" +
-                        "precio_unitario_impto, impuesto_por_unidad, pctje_dscto, precio_total_neto, precio_modificado, pctje_comis,\n" +
-                        "rol, notas,posicion, dscto_art, dscto_extra)\n" +
-                        "values (gen_id(id_doctos, 1), (select max(docto_pv_id) from doctos_pv WHERE tipo_docto='O' AND caja_id='3297'),(select clave_articulo from claves_articulos WHERE articulo_id = (select articulo_id from articulos where nombre = '"+articulo+"')), (select articulo_id from articulos WHERE nombre='"+articulo+"'), '"+tabla.getValueAt(i, 2)+"', 0,1, '"+tabla.getValueAt(i, 5)+"', '"+tabla.getValueAt(i, 5)+"',0, '"+descuento+"', '"+tabla.getValueAt(i, 7)+"', 'N',\n" +
-                        "0, 'N','"+notas+"' ,'"+posicion+"', '"+diferencia+"', 0)");
+                "precio_unitario_impto, impuesto_por_unidad, pctje_dscto, precio_total_neto, precio_modificado, pctje_comis,\n" +
+                "rol, notas,posicion, dscto_art, dscto_extra)\n" +
+                "values (gen_id(id_doctos, 1), (select max(docto_pv_id) from doctos_pv WHERE tipo_docto='O' AND caja_id='3297'),(select clave_articulo from claves_articulos WHERE articulo_id = (select articulo_id from articulos where nombre = '"+articulo+"')), (select articulo_id from articulos WHERE nombre='"+articulo+"'), '"+tabla.getValueAt(i, 2)+"', 0,1, '"+tabla.getValueAt(i, 5)+"', '"+tabla.getValueAt(i, 5)+"',0, '"+descuento+"', '"+tabla.getValueAt(i, 7)+"', 'N',\n" +
+                "0, 'N','"+notas+"' ,'"+posicion+"', '"+diferencia+"', 0)");
                 ps.executeUpdate();
                 posicion++;
             } catch (SQLException ex) {
@@ -141,6 +142,20 @@ public class finalizarOrden {
             psInsertFolio.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al actualizar el folio"+ex);
+            Logger.getLogger(finalizarOrden.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+        double val = 0;
+        double acumulable = 0;
+        for (int i = 0; i < tabla.getRowCount(); i++) {
+            val = (double) tabla.getValueAt(i, 2);
+            acumulable +=val;
+        }
+        
+        
+            PreparedStatement psInsertDias = cn.prepareStatement("INSERT INTO DIAS_VENCIDOS (ID_DOCTO,FOLIO_DOCTO,FECHA_INGRESO,FECHA_ENTREGA,FECHA_FINAL,DIAS_VENCIDOS,NUM_UNIDADES,SALDO) VALUES ((select max(docto_pv_id) from doctos_pv WHERE tipo_docto='O' AND caja_id='3297'),'"+fmt+"',DATE 'NOW','"+fecha+"','"+fechaUltima+"',0,'"+acumulable+"',0)");
+            psInsertDias.executeUpdate();
+        } catch (SQLException ex) {
             Logger.getLogger(finalizarOrden.class.getName()).log(Level.SEVERE, null, ex);
         }
         

@@ -1,14 +1,19 @@
 
 package com.sicws.puntoeventatouch.main;
 
+import com.sicws.puntodeventatouch.consultas.SaldoDiasVencidos;
 import java.awt.Image;
 import java.awt.Toolkit;
 
 
 public class MainFrame extends javax.swing.JFrame {
     
+    
+    
     public MainFrame() {
         initComponents();
+        SaldoDiasVencidos saldos = new SaldoDiasVencidos();
+        saldos.calcularSaldo();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
